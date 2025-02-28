@@ -1,70 +1,109 @@
-# Getting Started with Create React App
+# Web Application Mimicking Google Sheets
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Objective
 
-## Available Scripts
+Develop a web application that closely mimics the user interface and core functionalities of Google Sheets, with a focus on mathematical and data quality functions, data entry, and key UI interactions.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+### 1. Spreadsheet Interface
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Mimic Google Sheets UI: Strive for a visual design and layout that closely resembles Google Sheets, including the toolbar, formula bar, and cell structure.
+- Drag Functions: Implement drag functionality for cell content, formulas, and selections to mirror Google Sheets' behavior.
+- Cell Dependencies: Ensure that formulas and functions accurately reflect cell dependencies and update accordingly when changes are made to related cells.
+- Support for basic cell formatting (bold, italics, font size, color).
+- Ability to add, delete, and resize rows and columns.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 2. Mathematical Functions
 
-### `npm test`
+- Implement the following mathematical functions:
+  1. **SUM**: Calculates the sum of a range of cells.
+  2. **AVERAGE**: Calculates the average of a range of cells.
+  3. **MAX**: Returns the maximum value from a range of cells.
+  4. **MIN**: Returns the minimum value from a range of cells.
+  5. **COUNT**: Counts the number of cells containing numerical values in a range.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 3. Data Quality Functions
 
-### `npm run build`
+- Implement the following data quality functions:
+  1. **TRIM**: Removes leading and trailing whitespace from a cell.
+  2. **UPPER**: Converts the text in a cell to uppercase.
+  3. **LOWER**: Converts the text in a cell to lowercase.
+  4. **REMOVE\_DUPLICATES**: Removes duplicate rows from a selected range.
+  5. **FIND\_AND\_REPLACE**: Allows users to find and replace specific text within a range of cells.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 4. Data Entry and Validation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Allow users to input various data types (numbers, text, dates).
+- Implement basic data validation checks (e.g., ensuring numeric cells only contain numbers).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 5. Testing
 
-### `npm run eject`
+- Provide a means for users to test the implemented functions with their own data.
+- Display the results of function execution clearly.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Bonus Features
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Implement additional mathematical and data quality functions.
+- Add support for more complex formulas and cell referencing (e.g., relative and absolute references).
+- Allow users to save and load their spreadsheets.
+- Incorporate data visualization capabilities (e.g., charts, graphs).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Evaluation Criteria
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Fidelity to Google Sheets UI**: How closely the application's look and feel matches Google Sheets, including drag functions and cell dependency handling.
+- **Functionality and completeness** of the implemented features.
+- **Accuracy** of the mathematical and data quality functions.
+- **Usability and intuitiveness** of the user interface.
+- **Code quality and maintainability**.
+- **Implementation of bonus features**.
+- **README clarity**: Explanation of data structures and tech stack used.
 
-## Learn More
+## Tech Stack
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Frontend**: React.js for dynamic UI and state management.
+- **State Management**: Context API / Redux (if needed for complex state handling).
+- **Styling**: Tailwind CSS / Bootstrap for responsive and aesthetic design.
+- **Charting Library**: React Chart.js for data visualization and graph plotting.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Installation & Setup
 
-### Code Splitting
+1. Clone the repository:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+   ```sh
+   git clone https://github.com/yourusername/your-repo.git
+   cd your-repo
+   ```
 
-### Analyzing the Bundle Size
+2. Install dependencies:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+   ```sh
+   npm install
+   ```
 
-### Making a Progressive Web App
+3. Install React Chart.js dependencies:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+   ```sh
+   npm install react-chartjs-2 chart.js
+   ```
 
-### Advanced Configuration
+4. Start the development server:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+   ```sh
+   npm start
+   ```
 
-### Deployment
+## Dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- **React.js**: Core framework for building UI components.
+- **react-chartjs-2**: React wrapper for Chart.js, used for data visualization.
+- **chart.js**: Library for rendering charts and graphs.
+- **Tailwind CSS / Bootstrap**: For responsive and modern UI design.
+- **React Router**: For navigation within the application.
 
-### `npm run build` fails to minify
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License.
+
+##
+
