@@ -1,109 +1,117 @@
-# Web Application Mimicking Google Sheets
+# 📊 Web Application Mimicking Google Sheets
 
-## Objective
+## 🎯 Objective
 
-Develop a web application that closely mimics the user interface and core functionalities of Google Sheets, with a focus on mathematical and data quality functions, data entry, and key UI interactions.
+Develop a web application that closely mimics **Google Sheets**, focusing on:
+✅ Mathematical & data quality functions  
+✅ Smooth data entry & validation  
+✅ Key UI interactions for an intuitive spreadsheet experience  
 
-## Features
+---
 
-### 1. Spreadsheet Interface
+## 🚀 Features
 
-- Mimic Google Sheets UI: Strive for a visual design and layout that closely resembles Google Sheets, including the toolbar, formula bar, and cell structure.
-- Drag Functions: Implement drag functionality for cell content, formulas, and selections to mirror Google Sheets' behavior.
-- Cell Dependencies: Ensure that formulas and functions accurately reflect cell dependencies and update accordingly when changes are made to related cells.
-- Support for basic cell formatting (bold, italics, font size, color).
-- Ability to add, delete, and resize rows and columns.
+### 🖥️ 1. Spreadsheet Interface
 
-### 2. Mathematical Functions
+- 🎨 **Google Sheets-like UI**: Toolbar, formula bar, and cell structure
+- 🎯 **Drag & Drop**: Move cell content, formulas, and selections seamlessly
+- 🔗 **Cell Dependencies**: Automatically update formulas when referenced cells change
+- ✍️ **Basic Formatting**: Bold, italics, font size, and colors
+- 📏 **Rows & Columns**: Add, delete, and resize with ease
 
-- Implement the following mathematical functions:
-  1. **SUM**: Calculates the sum of a range of cells.
-  2. **AVERAGE**: Calculates the average of a range of cells.
-  3. **MAX**: Returns the maximum value from a range of cells.
-  4. **MIN**: Returns the minimum value from a range of cells.
-  5. **COUNT**: Counts the number of cells containing numerical values in a range.
+### 🔢 2. Mathematical Functions
 
-### 3. Data Quality Functions
+Perform calculations just like Google Sheets:
+- ➕ **SUM**: Adds up values in a range
+- 📊 **AVERAGE**: Computes the mean
+- 🔼 **MAX** / 🔽 **MIN**: Find the highest and lowest values
+- 🔢 **COUNT**: Counts numerical entries in a range
 
-- Implement the following data quality functions:
-  1. **TRIM**: Removes leading and trailing whitespace from a cell.
-  2. **UPPER**: Converts the text in a cell to uppercase.
-  3. **LOWER**: Converts the text in a cell to lowercase.
-  4. **REMOVE\_DUPLICATES**: Removes duplicate rows from a selected range.
-  5. **FIND\_AND\_REPLACE**: Allows users to find and replace specific text within a range of cells.
+### 🏆 3. Data Quality Functions
 
-### 4. Data Entry and Validation
+Improve data cleanliness with:
+- ✂️ **TRIM**: Remove extra spaces
+- 🔠 **UPPER** / 🔡 **LOWER**: Convert text case
+- 🚫 **REMOVE_DUPLICATES**: Delete duplicate entries
+- 🔍 **FIND_AND_REPLACE**: Search & replace text efficiently
 
-- Allow users to input various data types (numbers, text, dates).
-- Implement basic data validation checks (e.g., ensuring numeric cells only contain numbers).
+### ✍️ 4. Data Entry & Validation
 
-### 5. Testing
+- 📝 Supports numbers, text, and dates
+- ✅ Basic validation to ensure correct data types
 
-- Provide a means for users to test the implemented functions with their own data.
-- Display the results of function execution clearly.
+### 🧪 5. Testing & Debugging
 
-### Bonus Features
+- 🛠️ **Interactive Testing**: Try out functions with real data
+- 👀 **Clear Execution Results**: Display function outputs prominently
 
-- Implement additional mathematical and data quality functions.
-- Add support for more complex formulas and cell referencing (e.g., relative and absolute references).
-- Allow users to save and load their spreadsheets.
-- Incorporate data visualization capabilities (e.g., charts, graphs).
+### 🎁 Bonus Features *(Stretch Goals)*
 
-## Evaluation Criteria
+✨ Advanced formulas (absolute/relative references)  
+📊 Data visualization (charts, graphs)  
+💾 Save & load spreadsheets  
 
-- **Fidelity to Google Sheets UI**: How closely the application's look and feel matches Google Sheets, including drag functions and cell dependency handling.
-- **Functionality and completeness** of the implemented features.
-- **Accuracy** of the mathematical and data quality functions.
-- **Usability and intuitiveness** of the user interface.
-- **Code quality and maintainability**.
-- **Implementation of bonus features**.
-- **README clarity**: Explanation of data structures and tech stack used.
+---
 
-## Tech Stack
+## 📌 Evaluation Criteria
 
-- **Frontend**: React.js for dynamic UI and state management.
-- **State Management**: Context API / Redux (if needed for complex state handling).
-- **Styling**: Tailwind CSS / Bootstrap for responsive and aesthetic design.
-- **Charting Library**: React Chart.js for data visualization and graph plotting.
+- 🎨 **UI Similarity**: How close is the design to Google Sheets?
+- ⚙️ **Functionality**: Are all key features implemented?
+- 📏 **Accuracy**: Do formulas compute correctly?
+- 🏆 **Usability**: Is the interface intuitive and user-friendly?
+- 💻 **Code Quality**: Clean, maintainable, and scalable
+- 🎁 **Bonus Features**: Extra points for additional functionality
+- 📜 **README Clarity**: Documentation of data structures and tech stack
 
-## Installation & Setup
+---
 
-1. Clone the repository:
+## 🛠️ Tech Stack
 
+🖥️ **Frontend**: React.js ⚛️  
+🗄️ **State Management**: Context API / Redux (if needed)  
+🎨 **Styling**: Tailwind CSS / Bootstrap  
+📊 **Charting**: React Chart.js for graphs and visualization  
+
+---
+
+## ⚡ Installation & Setup
+
+1️⃣ **Clone the repository:**  
    ```sh
-   git clone https://github.com/yourusername/your-repo.git
-   cd your-repo
+   git clone https://github.com/manishdusa/google_sheets_app.git
+   cd google_sheets_app
    ```
 
-2. Install dependencies:
-
+2️⃣ **Install dependencies:**  
    ```sh
    npm install
    ```
 
-3. Install React Chart.js dependencies:
-
+3️⃣ **Install charting library (if needed):**  
    ```sh
    npm install react-chartjs-2 chart.js
    ```
 
-4. Start the development server:
-
+4️⃣ **Start the development server:**  
    ```sh
    npm start
    ```
 
-## Dependencies
+---
 
-- **React.js**: Core framework for building UI components.
-- **react-chartjs-2**: React wrapper for Chart.js, used for data visualization.
-- **chart.js**: Library for rendering charts and graphs.
-- **Tailwind CSS / Bootstrap**: For responsive and modern UI design.
-- **React Router**: For navigation within the application.
+## 📦 Dependencies
 
-## License
+- ⚛️ **React.js**: Core framework
+- 📊 **react-chartjs-2**: React wrapper for Chart.js
+- 📉 **chart.js**: Library for rendering charts
+- 🎨 **Tailwind CSS / Bootstrap**: Responsive UI design
+- 🛤️ **React Router**: For navigation
 
-This project is licensed under the MIT License.
+---
 
-##
+## 📜 License
+
+📝 This project is licensed under the **MIT License**.
+
+🌟 *Contributions welcome! Fork, improve, and submit PRs!* 🚀
 
