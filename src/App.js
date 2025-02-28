@@ -4,6 +4,7 @@ import './App.css';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 
+
 const GoogleSheetsClone = () => {
   // Initial grid dimensions
   const INITIAL_ROWS = 20;
@@ -187,7 +188,7 @@ const GoogleSheetsClone = () => {
       }
     }
     if ((trimmed.startsWith('"') && trimmed.endsWith('"')) ||
-        (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
+      (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
       return trimmed.substring(1, trimmed.length - 1);
     }
     return trimmed;
@@ -304,33 +305,36 @@ const GoogleSheetsClone = () => {
   // Cell Formatting and Alignment
   // ----------------------------------------------------------------------
   const applyCellFormat = (formatType, value) => {
-    if (!activeCell) return;
-    pushHistory();
-    const newGrid = { ...grid };
-    const cell = newGrid[activeCell];
-    const newStyle = { ...cell.style };
-    switch (formatType) {
-      case 'bold':
-        newStyle.fontWeight = newStyle.fontWeight === 'bold' ? 'normal' : 'bold';
-        break;
-      case 'italic':
-        newStyle.fontStyle = newStyle.fontStyle === 'italic' ? 'normal' : 'italic';
-        break;
-      case 'underline':
-        newStyle.textDecoration = newStyle.textDecoration === 'underline' ? 'none' : 'underline';
-        break;
-      case 'fontsize':
-        newStyle.fontSize = value;
-        break;
-      case 'color':
-        newStyle.color = value;
-        break;
-      default:
-        break;
-    }
-    newGrid[activeCell] = { ...cell, style: newStyle };
-    setGrid(newGrid);
-  };
+  if (!activeCell) return;
+  pushHistory();
+  const newGrid = { ...grid };
+  const cell = newGrid[activeCell];
+  const newStyle = { ...cell.style };
+  switch (formatType) {
+    case 'bold':
+      newStyle.fontWeight = newStyle.fontWeight === 'bold' ? 'normal' : 'bold';
+      break;
+    case 'italic':
+      newStyle.fontStyle = newStyle.fontStyle === 'italic' ? 'normal' : 'italic';
+      break;
+    case 'underline':
+      newStyle.textDecoration = newStyle.textDecoration === 'underline' ? 'none' : 'underline';
+      break;
+    case 'fontsize':
+      newStyle.fontSize = value;
+      break;
+    case 'fontFamily':
+      newStyle.fontFamily = value;
+      break;
+    case 'color':
+      newStyle.color = value;
+      break;
+    default:
+      break;
+  }
+  newGrid[activeCell] = { ...cell, style: newStyle };
+  setGrid(newGrid);
+};
 
   const applyAlignment = (alignment) => {
     if (!activeCell) return;
@@ -635,99 +639,402 @@ const GoogleSheetsClone = () => {
   // ----------------------------------------------------------------------
   // Render Helpers: Toolbar, Cell, and Grid Rendering
   // ----------------------------------------------------------------------
-  const renderToolbar = () => (
-    <div className="toolbar" style={{ position: 'relative', zIndex: 1000, pointerEvents: 'auto' }}>
-      <div className="toolbar-group">
-        <button className="toolbar-button material-icons" onClick={() => applyCellFormat('bold')}>
-          format_bold
-        </button>
-        <button className="toolbar-button material-icons" onClick={() => applyCellFormat('italic')}>
-          format_italic
-        </button>
-        <button className="toolbar-button material-icons" onClick={() => applyCellFormat('underline')}>
-          format_underlined
-        </button>
-        <div className="toolbar-divider" />
-        <button className="toolbar-button material-icons" onClick={() => applyAlignment('left')}>
-          format_align_left
-        </button>
-        <button className="toolbar-button material-icons" onClick={() => applyAlignment('center')}>
-          format_align_center
-        </button>
-        <button className="toolbar-button material-icons" onClick={() => applyAlignment('right')}>
-          format_align_right
-        </button>
-        <div className="toolbar-divider" />
-        <input
-          type="color"
-          className="toolbar-color-picker"
-          onChange={(e) => applyCellFormat('color', e.target.value)}
-        />
-        <select
-          className="font-size-select"
-          onChange={(e) => applyCellFormat('fontsize', e.target.value)}
-          value={activeCell ? grid[activeCell]?.style.fontSize : '14px'}
-        >
-          {[10, 12, 14, 16, 18, 20].map(size => (
-            <option key={size} value={`${size}px`}>
-              {size}px
-            </option>
-          ))}
-        </select>
-        <select
-          className="data-type-select"
-          onChange={handleDataTypeChange}
-          value={activeCell ? grid[activeCell]?.dataType : 'text'}
-          disabled={!activeCell}
-        >
-          <option value="text">Text</option>
-          <option value="number">Number</option>
-          <option value="date">Date</option>
-        </select>
-      </div>
-
-      <div className="toolbar-group">
-        <button className="toolbar-button material-icons" onClick={handleUndo}>
-          undo
-        </button>
-        <button className="toolbar-button material-icons" onClick={handleRedo}>
-          redo
-        </button>
-        <div className="toolbar-divider" />
-      </div>
-
-      <div className="toolbar-group">
-        <div className="formula-bar">
-          <input
-            type="text"
-            value={formulaBarValue}
-            onChange={handleFormulaChange}
-            className="formula-input"
-            placeholder="Enter formula"
-          />
+  const RenderToolbar = () => {
+    const [activeTab, setActiveTab] = useState('format'); // State to track active tab
+  
+    return (
+      <div className="toolbar" style={{ 
+        position: 'relative', 
+        zIndex: 1000, 
+        pointerEvents: 'auto',
+        background: 'linear-gradient(to bottom, #f8f9fa, #e9ecef)',
+        borderBottom: '1px solid #dee2e6',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+        borderRadius: '4px 4px 0 0'
+      }}>
+        <div className="toolbar-header" style={{ 
+          display: 'flex', 
+          borderBottom: '1px solid #dee2e6',
+          padding: '4px 8px 0 8px'
+        }}>
+          <div className="toolbar-title" style={{ 
+            fontWeight: 'bold', 
+            fontSize: '14px',
+            color: '#495057',
+            padding: '4px 8px',
+            marginRight: '20px'
+          }}>
+            Spreadsheet Editor
+          </div>
+          
+          {/* Tab Navigation */}
+          <div className="toolbar-tabs" style={{ display: 'flex' }}>
+            {['format', 'insert', 'data', 'view', 'tools'].map(tab => (
+              <div
+                key={tab}
+                className={`toolbar-tab ${activeTab === tab ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab)}
+                style={{
+                  padding: '4px 12px',
+                  cursor: 'pointer',
+                  borderTopLeftRadius: '4px',
+                  borderTopRightRadius: '4px',
+                  marginRight: '2px',
+                  backgroundColor: activeTab === tab ? '#ffffff' : 'transparent',
+                  border: activeTab === tab ? '1px solid #dee2e6' : 'none',
+                  borderBottom: activeTab === tab ? 'none' : 'inherit',
+                  position: activeTab === tab ? 'relative' : 'static',
+                  top: activeTab === tab ? '1px' : '0',
+                  fontWeight: activeTab === tab ? 'bold' : 'normal',
+                  color: activeTab === tab ? '#495057' : '#6c757d',
+                  textTransform: 'capitalize'
+                }}
+              >
+                {tab}
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Tab Content */}
+        <div className="toolbar-content" style={{ 
+          backgroundColor: '#ffffff', 
+          padding: '8px', 
+          minHeight: '50px'
+        }}>
+          {/* Format Tab */}
+          {activeTab === 'format' && (
+            <div className="format-tab-content" style={{ display: 'flex', gap: '10px' }}>
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>Text Format</span>
+                <div style={{ display: 'flex', gap: '2px' }}>
+                  <button className="toolbar-button material-icons small-button" onClick={() => applyCellFormat('bold')} title="Bold">
+                    format_bold
+                  </button>
+                  <button className="toolbar-button material-icons small-button" onClick={() => applyCellFormat('italic')} title="Italic">
+                    format_italic
+                  </button>
+                  <button className="toolbar-button material-icons small-button" onClick={() => applyCellFormat('underline')} title="Underline">
+                    format_underlined
+                  </button>
+                </div>
+              </div>
+              
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>Font</span>
+                <div className="font-family-container">
+                  <select
+                    className="font-family-select"
+                    onChange={(e) => applyCellFormat('fontFamily', e.target.value)}
+                    value={activeCell ? grid[activeCell]?.style.fontFamily : 'Arial'}
+                    style={{ border: '1px solid #dee2e6', height: '24px', width: '120px' }}
+                  >
+                    <option value="Arial">Arial</option>
+                    <option value="Helvetica">Helvetica</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Verdana">Verdana</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>Alignment</span>
+                <div style={{ display: 'flex', gap: '2px' }}>
+                  <button className="toolbar-button material-icons small-button" onClick={() => applyAlignment('left')} title="Align Left">
+                    format_align_left
+                  </button>
+                  <button className="toolbar-button material-icons small-button" onClick={() => applyAlignment('center')} title="Align Center">
+                    format_align_center
+                  </button>
+                  <button className="toolbar-button material-icons small-button" onClick={() => applyAlignment('right')} title="Align Right">
+                    format_align_right
+                  </button>
+                </div>
+              </div>
+              
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', color: '#6c757d' }}>Color</span>
+                <input
+                  type="color"
+                  className="toolbar-color-picker"
+                  onChange={(e) => applyCellFormat('color', e.target.value)}
+                  style={{ border: '1px solid #dee2e6', width: '24px', height: '24px' }}
+                />
+              </div>
+              
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>Font Size</span>
+                <select
+                  className="font-size-select"
+                  onChange={(e) => applyCellFormat('fontsize', e.target.value)}
+                  value={activeCell ? grid[activeCell]?.style.fontSize : '14px'}
+                  style={{ border: '1px solid #dee2e6', height: '24px', width: '60px' }}
+                >
+                  {[10, 12, 14, 16, 18, 20].map(size => (
+                    <option key={size} value={`${size}px`}>
+                      {size}px
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+          
+          {/* Insert Tab */}
+          {activeTab === 'insert' && (
+            <div className="insert-tab-content" style={{ display: 'flex', gap: '10px' }}>
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>Chart</span>
+                <button onClick={() => setShowChart(true)} className="toolbar-button" style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center', 
+                  padding: '4px 8px', 
+                  backgroundColor: '#f8f9fa',
+                  border: '1px solid #dee2e6',
+                  borderRadius: '4px'
+                }}>
+                  <span className="material-icons" style={{ fontSize: '20px', color: '#0d6efd' }}>
+                    insert_chart
+                  </span>
+                  <span style={{ fontSize: '11px', marginTop: '2px' }}>Chart</span>
+                </button>
+              </div>
+              
+              {/* Add other insert options here */}
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>Table Structure</span>
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  <button onClick={addRow} className="toolbar-button" style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center', 
+                    padding: '4px 8px', 
+                    backgroundColor: '#f8f9fa',
+                    border: '1px solid #dee2e6',
+                    borderRadius: '4px'
+                  }}>
+                    <span className="material-icons" style={{ fontSize: '20px', color: '#198754' }}>
+                      add_box
+                    </span>
+                    <span style={{ fontSize: '11px', marginTop: '2px' }}>Add Row</span>
+                  </button>
+                  
+                  <button onClick={addColumn} className="toolbar-button" style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center', 
+                    padding: '4px 8px', 
+                    backgroundColor: '#f8f9fa',
+                    border: '1px solid #dee2e6',
+                    borderRadius: '4px'
+                  }}>
+                    <span className="material-icons" style={{ fontSize: '20px', color: '#198754' }}>
+                      add_box
+                    </span>
+                    <span style={{ fontSize: '11px', marginTop: '2px' }}>Add Column</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Data Tab */}
+          {activeTab === 'data' && (
+            <div className="data-tab-content" style={{ display: 'flex', gap: '10px' }}>
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>Data Type</span>
+                <select
+                  className="data-type-select"
+                  onChange={handleDataTypeChange}
+                  value={activeCell ? grid[activeCell]?.dataType : 'text'}
+                  disabled={!activeCell}
+                  style={{ border: '1px solid #dee2e6', height: '24px', width: '90px' }}
+                >
+                  <option value="text">Text</option>
+                  <option value="number">Number</option>
+                  <option value="date">Date</option>
+                </select>
+              </div>
+              
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px',
+                flex: '1 1 auto'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>Formula</span>
+                <div className="formula-bar" style={{ display: 'flex', alignItems: 'center' }}>
+                  <span className="formula-icon material-icons" style={{ fontSize: '16px', color: '#6c757d', marginRight: '4px' }}>
+                    functions
+                  </span>
+                  <input
+                    type="text"
+                    value={formulaBarValue}
+                    onChange={handleFormulaChange}
+                    className="formula-input"
+                    placeholder="Enter formula"
+                    style={{ 
+                      flex: '1 1 auto', 
+                      height: '24px', 
+                      padding: '0 8px',
+                      border: '1px solid #dee2e6',
+                      borderRadius: '3px'
+                    }}
+                  />
+                </div>
+              </div>
+              
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>Delete</span>
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  <button onClick={deleteRow} className="toolbar-button" style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center', 
+                    padding: '4px 8px', 
+                    backgroundColor: '#f8f9fa',
+                    border: '1px solid #dee2e6',
+                    borderRadius: '4px'
+                  }}>
+                    <span className="material-icons" style={{ fontSize: '20px', color: '#dc3545' }}>
+                      remove_circle
+                    </span>
+                    <span style={{ fontSize: '11px', marginTop: '2px' }}>Delete Row</span>
+                  </button>
+                  
+                  <button onClick={deleteColumn} className="toolbar-button" style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center', 
+                    padding: '4px 8px', 
+                    backgroundColor: '#f8f9fa',
+                    border: '1px solid #dee2e6',
+                    borderRadius: '4px'
+                  }}>
+                    <span className="material-icons" style={{ fontSize: '20px', color: '#dc3545' }}>
+                      remove_circle
+                    </span>
+                    <span style={{ fontSize: '11px', marginTop: '2px' }}>Delete Column</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* View Tab */}
+          {activeTab === 'view' && (
+            <div className="view-tab-content" style={{ padding: '10px' }}>
+              <div style={{ fontSize: '14px', color: '#6c757d' }}>
+                View options will be available soon.
+              </div>
+            </div>
+          )}
+          
+          {/* Tools Tab */}
+          {activeTab === 'tools' && (
+            <div className="tools-tab-content" style={{ display: 'flex', gap: '10px' }}>
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>History</span>
+                <div style={{ display: 'flex', gap: '2px' }}>
+                  <button className="toolbar-button material-icons small-button" onClick={handleUndo} title="Undo">
+                    undo
+                  </button>
+                  <button className="toolbar-button material-icons small-button" onClick={handleRedo} title="Redo">
+                    redo
+                  </button>
+                </div>
+              </div>
+              
+              <div className="toolbar-group" style={{ 
+                padding: '4px',
+                border: '1px solid #ced4da',
+                borderRadius: '4px'
+              }}>
+                <span className="toolbar-group-label" style={{ fontSize: '11px', display: 'block', color: '#6c757d', marginBottom: '4px' }}>File Operations</span>
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  <button onClick={saveSpreadsheet} className="toolbar-button" style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center', 
+                    padding: '4px 8px', 
+                    backgroundColor: '#f8f9fa',
+                    border: '1px solid #dee2e6',
+                    borderRadius: '4px'
+                  }}>
+                    <span className="material-icons" style={{ fontSize: '20px', color: '#0d6efd' }}>
+                      save
+                    </span>
+                    <span style={{ fontSize: '11px', marginTop: '2px' }}>Save</span>
+                  </button>
+                  
+                  <button onClick={loadSpreadsheet} className="toolbar-button" style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center', 
+                    padding: '4px 8px', 
+                    backgroundColor: '#f8f9fa',
+                    border: '1px solid #dee2e6',
+                    borderRadius: '4px'
+                  }}>
+                    <span className="material-icons" style={{ fontSize: '20px', color: '#0d6efd' }}>
+                      folder_open
+                    </span>
+                    <span style={{ fontSize: '11px', marginTop: '2px' }}>Open</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-
-      <div className="toolbar-group">
-        <button onClick={saveSpreadsheet} className="toolbar-button btn-save material-icons">
-          save
-        </button>
-        <button onClick={loadSpreadsheet} className="toolbar-button btn-load material-icons">
-          folder_open
-        </button>
-        <button onClick={() => setShowChart(true)} className="toolbar-button btn-chart material-icons">
-          insert_chart
-        </button>
-      </div>
-
-      <div className="toolbar-group">
-        <button onClick={addRow} className="toolbar-button bg-green-500">+ Row</button>
-        <button onClick={addColumn} className="toolbar-button bg-green-500">+ Col</button>
-        <button onClick={deleteRow} className="toolbar-button bg-red-500">- Row</button>
-        <button onClick={deleteColumn} className="toolbar-button bg-red-500">- Col</button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderCell = (row, col) => {
     const cellId = `${row},${col}`;
@@ -793,14 +1100,14 @@ const GoogleSheetsClone = () => {
 
   return (
     <div className="app">
-      {renderToolbar()}
+      {RenderToolbar()}
       {renderGrid()}
       <div className="status-bar">
         {selectedCells.length > 1
           ? `${selectedCells.length} cells selected`
           : activeCell
-          ? `${getCellRef(...activeCell.split(',').map(Number))}`
-          : 'Ready'}
+            ? `${getCellRef(...activeCell.split(',').map(Number))}`
+            : 'Ready'}
       </div>
       {showChart && (
         <div className="chart-modal">

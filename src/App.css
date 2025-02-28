@@ -188,6 +188,40 @@ html, body, #root {
   user-select: none;
 }
 
+.small-button {
+  padding: 4px 6px;
+  font-size: 16px;
+  min-width: 24px;
+  height: 24px;
+}
+
+.small-select {
+  height: 24px;
+  font-size: 12px;
+  padding: 0 4px;
+  width: auto;
+  min-width: 70px;
+}
+
+.small-input {
+  height: 24px;
+  width: 24px;
+  padding: 2px;
+}
+
+.small-dropdown {
+  display: inline-block;
+  width: auto;
+}
+
+.small-formula {
+  height: 24px;
+}
+
+.material-icons.small-button {
+  font-size: 16px;
+}
+
 .row-header {
   width: 48px;
   min-width: 48px;
